@@ -15,6 +15,7 @@ import com.badlogic.gdx.physics.box2d.Box2D;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.ScreenUtils;
+import com.badlogic.gdx.utils.TimeUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,6 +29,9 @@ public class ScreenGame implements Screen {
     private OrthographicCamera camera;
     List<DynamicObjectCircle> fruits = new ArrayList<>();
     Texture circleRed, circleGreen;
+    TextureRegion cRed, cGreen;
+    long timeSpawnFruitLast,timeSpawnFruitInterval;
+
     public ScreenGame(){
         batch = new SpriteBatch();
         camera = new OrthographicCamera();
@@ -40,8 +44,9 @@ public class ScreenGame implements Screen {
 
         circleRed = new Texture("red_circle.png");
         circleGreen = new Texture("green_circle.png");
-        TextureRegion cRed = new TextureRegion(circleRed, 256, 256);
-        TextureRegion cGreen = new TextureRegion(circleGreen, 256, 256);
+        cRed = new TextureRegion(circleRed, 256, 256);
+        cGreen = new TextureRegion(circleGreen, 256, 256);
+
 
     }
 
@@ -54,48 +59,59 @@ public class ScreenGame implements Screen {
 
     @Override
     public void render(float delta) {
-
-
+        if(TimeUtils.millis()> timeSpawnFruitLast+timeSpawnFruitInterval){
+            timeSpawnFruitInterval = MathUtils.random(200, 2000);
+            timeSpawnFruitLast = TimeUtils.millis();
+            spawnFruit();
+        }
+        for (int i = fruits.size()-1; i >=0 ; i--) {
+            if(fruits.get(i).out()) {
+                world.destroyBody(fruits.get(i).body);
+                fruits.get(i).body = null;
+                fruits.remove(i);
+            }
+        }
 
         // отрисовка
         ScreenUtils.clear(0.15f, 0.15f, 0.2f, 1f);
         debugRenderer.render(world, camera.combined);
         batch.setProjectionMatrix(camera.combined);
         batch.begin();
-        /*for(int i=0; i<balls.length; i++) {
-            batch.draw(balls[i].img, balls[i].getX(), balls[i].getY(),
-                balls[i].getWidth()/2, balls[i].getHeight()/2,
-                balls[i].getWidth(), balls[i].getHeight(), 1, 1, balls[i].getAngle());
-        }*/
+        for(DynamicObjectCircle f: fruits) {
+            batch.draw(f.img, f.getX(), f.getY(), f.getWidth()/2, f.getHeight()/2, f.getWidth(), f.getHeight(), 1, 1, f.getAngle());
+        }
         batch.end();
         world.step(1/60f, 6, 2);
 
     }
+    private void spawnFruit(){
+        fruits.add(new DynamicObjectCircle(world,MathUtils.random(0,W_WIDTH),-2, 0.5f , cRed));
+    }
 
     @Override
     public void resize(int width, int height) {
-        // Resize your screen here. The parameters represent the new window size.
+
     }
 
 
     @Override
     public void pause() {
-        // Invoked when your application is paused.
+
     }
 
     @Override
     public void resume() {
-        // Invoked when your application is resumed after pause.
+
     }
 
     @Override
     public void hide() {
-        // This method is called when another screen replaces this one.
+
     }
 
     @Override
     public void dispose() {
-        // Destroy screen's assets here.
+
     }
     class MyInputProcessor implements InputProcessor {
         Vector3 touchStartPos = new Vector3();
@@ -148,6 +164,15 @@ public class ScreenGame implements Screen {
 
         @Override
         public boolean touchDragged(int screenX, int screenY, int pointer) {
+            touchStartPos.set(screenX, screenY, 0);
+            camera.unproject(touchStartPos);
+            for (int i= fruits.size()-1; i>=0; i--) {
+                if(fruits.get(i).hit(touchStartPos)) {
+                    world.destroyBody(fruits.get(i).body);
+                    fruits.get(i).body = null;
+                    fruits.remove(i);
+                }
+            }
             return false;
         }
 
