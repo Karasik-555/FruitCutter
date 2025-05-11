@@ -31,6 +31,7 @@ public class ScreenGame implements Screen {
     Texture circleRed, circleGreen;
     TextureRegion cRed, cGreen;
     long timeSpawnFruitLast,timeSpawnFruitInterval;
+    int score;
 
     public ScreenGame(){
         batch = new SpriteBatch();
@@ -171,6 +172,7 @@ public class ScreenGame implements Screen {
                     world.destroyBody(fruits.get(i).body);
                     fruits.get(i).body = null;
                     fruits.remove(i);
+                    score++;
                 }
             }
             return false;
