@@ -17,14 +17,14 @@ import com.badlogic.gdx.utils.Array;
 public class DynamicObjectCircle {
     public float x, y;
     public float radius;
-    public TextureRegion img;
+    public int type;
     public Body body;
 
-    public DynamicObjectCircle(World world, float x, float y, float radius, TextureRegion img) {
+    public DynamicObjectCircle(World world, float x, float y, float radius, int type) {
         this.x = x;
         this.y = y;
         this.radius = radius;
-        this.img = img;
+        this.type = type;
 
         BodyDef bodyDef = new BodyDef();
         bodyDef.type = BodyDef.BodyType.DynamicBody;
@@ -46,6 +46,7 @@ public class DynamicObjectCircle {
 
         Vector2 start = new Vector2((W_WIDTH/2-x)/2, 10);
         body.applyLinearImpulse(start,body.getPosition(),true);
+        body.applyAngularImpulse(MathUtils.random(-1f, 1f), true);
     }
 
     public boolean hit(Vector3 t){
