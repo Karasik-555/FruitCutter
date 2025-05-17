@@ -1,7 +1,7 @@
 package ru.fruitcutter;
 
-import static ru.fruitcutter.Main.*;
-import static ru.fruitcutter.ScreenGame.W_WIDTH;
+
+import static ru.fruitcutter.ScreenGame.*;
 
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
@@ -11,6 +11,8 @@ public class FruitButton {
     String text;
     BitmapFont font;
     float x, y;
+    Vector3 touchPosition;
+    public boolean buttonTouched;
 
     float width, height;
 
@@ -31,7 +33,7 @@ public class FruitButton {
         GlyphLayout glyphLayout = new GlyphLayout(font, text);
         width = glyphLayout.width;
         height = glyphLayout.height;
-        x = 1600/2 - width/2;
+        x = W_WIDTH*100/2 - width/2;
     }
 
     public void setFont(BitmapFont font){
@@ -46,12 +48,8 @@ public class FruitButton {
         GlyphLayout glyphLayout = new GlyphLayout(font, text);
         width = glyphLayout.width;
     }
-
-    boolean hit(float tx, float ty){
-        return x<tx && tx<x+width && y>ty && ty>y-height;
-    }
-
-    boolean hit(Vector3 t){
+    boolean buttonHit(Vector3 t){
         return x<t.x && t.x<x+width && y>t.y && t.y>y-height;
+        }
     }
-}
+
