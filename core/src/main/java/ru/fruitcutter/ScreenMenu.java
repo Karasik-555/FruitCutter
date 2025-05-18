@@ -37,16 +37,12 @@ public class ScreenMenu implements Screen {
         font = main.font;
         batchTxt = main.batch;
         cameraTxt = main.cameraTxt;
-        if(isSoundOn){
-            soundText = "Sound Off";
-        } else {
-            soundText = "Sound  On";
-        }
         imgBackGround = new Texture("menubackground.jpg");
         btnPlay = new Buttons("Play", font, 700, 600);
         btnAbout = new Buttons("About", font, 680, 500);
         btnExit = new Buttons("Exit", font, 707, 300);
-        btnSound = new Buttons(soundText, font, 615, 400);
+
+        btnSound = new Buttons(isSoundOn ? "Sound On" : "Sound Off", font, 615, 400);
     }
 
     @Override
@@ -65,6 +61,7 @@ public class ScreenMenu implements Screen {
             }
             if(btnSound.buttonHit(touch)){
                 isSoundOn = !isSoundOn;
+                btnSound.setText(isSoundOn ? "Sound On" : "Sound Off");
             }
             if(btnAbout.buttonHit(touch)){
                 main.setScreen(main.screenAbout);

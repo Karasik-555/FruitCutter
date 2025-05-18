@@ -54,10 +54,8 @@ public class ScreenAbout implements Screen {
         if(Gdx.input.justTouched()){
             touch.set(Gdx.input.getX(), Gdx.input.getY(), 0);
             cameraTxt.unproject(touch);
-
             if(btnBack.buttonHit(touch)){
                 main.setScreen(main.screenMenu);
-                System.out.println("zzzz"+touch.x+" "+touch.y);
             }
         }
         // отрисовка
