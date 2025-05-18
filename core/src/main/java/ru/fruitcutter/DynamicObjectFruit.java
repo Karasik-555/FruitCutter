@@ -2,7 +2,6 @@ package ru.fruitcutter;
 
 import static ru.fruitcutter.ScreenGame.*;
 
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
@@ -14,13 +13,13 @@ import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.Array;
 
-public class DynamicObjectCircle {
+public class DynamicObjectFruit {
     public float x, y;
     public float radius;
     public int type;
     public Body body;
 
-    public DynamicObjectCircle(World world, float x, float y, float radius, int type) {
+    public DynamicObjectFruit(World world, float x, float y, float radius, int type) {
         this.x = x;
         this.y = y;
         this.radius = radius;

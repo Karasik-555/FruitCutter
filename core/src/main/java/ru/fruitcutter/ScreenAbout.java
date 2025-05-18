@@ -1,6 +1,5 @@
 package ru.fruitcutter;
 
-import static ru.fruitcutter.Main.*;
 import static ru.fruitcutter.ScreenGame.*;
 
 import com.badlogic.gdx.Gdx;
@@ -10,7 +9,6 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector3;
-import com.badlogic.gdx.utils.Align;
 
 public class ScreenAbout implements Screen {
     private SpriteBatch batch;
@@ -23,7 +21,7 @@ public class ScreenAbout implements Screen {
 
     Texture imgBackGround;
 
-    FruitButton btnBack, Text;
+    Buttons btnBack, Text;
     private String text = "    В этой игре ты должен нажимать\n" +
         "  на фрукты и, тем самым, разрезать их.\n" +
         " Чтобы начать игру, нажми кнопку 'Play'\n" +
@@ -41,8 +39,8 @@ public class ScreenAbout implements Screen {
 
         imgBackGround = new Texture("background.jpg");
 
-        btnBack = new FruitButton("Back", font, 800);
-        Text = new FruitButton(text, font, 600);
+        btnBack = new Buttons("Back", font, 870);
+        Text = new Buttons(text, font, 600);
     }
 
 
@@ -69,7 +67,7 @@ public class ScreenAbout implements Screen {
         batchTxt.setProjectionMatrix(cameraTxt.combined);
         batchTxt.begin();
         Text.font.draw(batch, Text.text,Text.x, Text.y);
-        btnBack.font.draw(batch, btnBack.text, btnBack.x, btnBack.y);
+        btnBack.font.draw(batch, btnBack.text, 50, btnBack.y);
         batchTxt.end();
     }
 

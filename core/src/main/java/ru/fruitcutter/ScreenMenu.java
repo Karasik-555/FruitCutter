@@ -1,6 +1,6 @@
 package ru.fruitcutter;
 
-import static ru.fruitcutter.Main.isSoundOn;
+import static ru.fruitcutter.Main.*;
 import static ru.fruitcutter.ScreenGame.*;
 
 import com.badlogic.gdx.Gdx;
@@ -23,13 +23,14 @@ public class ScreenMenu implements Screen {
 
     Texture imgBackGround;
 
-    FruitButton btnPlay;
-    FruitButton btnAbout;
-    FruitButton btnExit;
-    FruitButton btnSound;
+    Buttons btnPlay;
+    Buttons btnAbout;
+    Buttons btnExit;
+    Buttons btnSound;
     String soundText;
 
     public ScreenMenu(Main main) {
+        this.main = main;
         batch = main.batch;
         camera = main.camera;
         touch = main.touch;
@@ -42,10 +43,10 @@ public class ScreenMenu implements Screen {
             soundText = "Sound  On";
         }
         imgBackGround = new Texture("menubackground.jpg");
-        btnPlay = new FruitButton("Play", font, 700, 600);
-        btnAbout = new FruitButton("About", font, 680, 500);
-        btnExit = new FruitButton("Exit", font, 707, 300);
-        btnSound = new FruitButton(soundText, font, 615, 400);
+        btnPlay = new Buttons("Play", font, 700, 600);
+        btnAbout = new Buttons("About", font, 680, 500);
+        btnExit = new Buttons("Exit", font, 707, 300);
+        btnSound = new Buttons(soundText, font, 615, 400);
     }
 
     @Override
@@ -82,7 +83,7 @@ public class ScreenMenu implements Screen {
         btnAbout.font.draw(batchTxt, btnAbout.text, btnAbout.x, btnAbout.y);
         btnExit.font.draw(batchTxt, btnExit.text, btnExit.x, btnExit.y);
         btnSound.font.draw(batchTxt, btnSound.text, btnSound.x, btnSound.y);
-        font.draw(batchTxt,"Your best score: " + menuScore, 10, 50, W_WIDTH * 100 - 10, Align.left, true);
+        font.draw(batchTxt,"Your best score: " + maxScore, 10, 50, W_WIDTH * 100 - 10, Align.left, true);
         batchTxt.end();
     }
 

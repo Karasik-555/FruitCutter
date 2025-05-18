@@ -34,29 +34,31 @@ public class ScreenGame implements Screen {
     private SpriteBatch batch;
     private SpriteBatch batchTxt;
     private Sprite knife;
-    private Vector3 touch,clickPos;
+    private Vector3 touch,cursorPos;
     private World world;
     private Main main;
     private Box2DDebugRenderer debugRenderer;
     private OrthographicCamera camera;
     private OrthographicCamera cameraTxt;
     private BitmapFont font;
-    public int score,maxScore;
-    public static int menuScore;
-    List<DynamicObjectCircle> fruits = new ArrayList<>();
-    Texture background ,apple, watermelon,orange, abricot, bomb, tKnife;
-    TextureRegion imgBackground,imgKnife;
+    float boomX, boomY;
+    public int score;
+    public static int maxScore;
+    List<DynamicObjectFruit> fruits = new ArrayList<>();
+    Texture background ,apple, watermelon,orange, abricot, bomb, tKnife, boom;
+    TextureRegion imgBackground,imgKnife, imgBoom;
     TextureRegion[] imgFruits = new TextureRegion[5];
     long timeSpawnFruitLast, timeSpawnFruitInterval;
     boolean isGameOver;
-    FruitButton btnMenu;
-    FruitButton btnRestart;
+    Buttons btnMenu;
+    Buttons btnRestart;
     Sound sndCut;
     Sound sndExplosion;
 
 
 
     public ScreenGame(Main main){
+        this.main = main;
         batch = main.batch;
         camera = main.camera;
         batchTxt = main.batchTxt;
@@ -68,13 +70,14 @@ public class ScreenGame implements Screen {
         debugRenderer = new Box2DDebugRenderer();
         Gdx.input.setInputProcessor(new MyInputProcessor());
         background = new Texture("background.jpg");
-        btnMenu = new FruitButton("Menu", font, 1470, 890);
-        btnRestart = new FruitButton("Restart", font, 700, W_HEIGHT*100/2-100);
+        btnMenu = new Buttons("Menu", font, 1470, 890);
+        btnRestart = new Buttons("Restart", font, 700, W_HEIGHT*100/2-100);
 
 
         tKnife = new Texture("knife.png");
         knife = new Sprite(tKnife);
         knife.setOriginCenter();
+        boom = new Texture("boom.png");
 
 
         apple = new Texture("apple.png");
@@ -83,6 +86,7 @@ public class ScreenGame implements Screen {
         orange = new Texture("orange.png");
         abricot = new Texture("abricot.png");
         bomb = new Texture("bomb.png");
+        imgBoom = new TextureRegion(boom,300,300);
         imgBackground = new TextureRegion(background,1600,900);
         imgKnife = new TextureRegion(tKnife,256,256);
         imgFruits[0] = new TextureRegion(apple, 256, 256);
@@ -92,7 +96,6 @@ public class ScreenGame implements Screen {
         imgFruits[4] = new TextureRegion(bomb, 384,384);
         sndCut = Gdx.audio.newSound(Gdx.files.internal("cut.mp3"));
         sndExplosion = Gdx.audio.newSound(Gdx.files.internal("explosion.mp3"));
-        menuScore = maxScore;
     }
     @Override
     public void show() {
@@ -101,7 +104,7 @@ public class ScreenGame implements Screen {
 
     @Override
     public void render(float delta) {
-            score = 0;
+
         if(Gdx.input.justTouched()) {
             touch.set(Gdx.input.getX(), Gdx.input.getY(), 0);
             camera.unproject(touch);
@@ -128,26 +131,21 @@ public class ScreenGame implements Screen {
 
 
         // отрисовка
-        Gdx.gl.glClearColor(0.2f, 0.2f, 0.2f, 1);
-        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-        camera.update();
+        ScreenUtils.clear(0.15f, 0.15f, 0.2f, 1f);
         batch.setProjectionMatrix(camera.combined);
-
-        Vector3 cursorPos = new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0);
+        cursorPos = new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0);
         camera.unproject(cursorPos);
         knife.setPosition(cursorPos.x - knife.getWidth() / 2, cursorPos.y - knife.getHeight() / 2);
         batch.begin();
         knife.draw(batch);
-        batch.end();
-        ScreenUtils.clear(0.15f, 0.15f, 0.2f, 1f);
-        batch.begin();
         batch.draw(imgBackground,0,0,W_WIDTH,W_HEIGHT);
-        batch.end();
         //debugRenderer.render(world, camera.combined);
-        batch.setProjectionMatrix(camera.combined);
-        batch.begin();
+        if(isGameOver){
+            batch.draw(imgBoom, boomX,boomY);
+        }
 
-        for(DynamicObjectCircle f: fruits) {
+
+        for(DynamicObjectFruit f: fruits) {
             batch.draw(imgFruits[f.type], f.getX(), f.getY(), f.getWidth()/2, f.getHeight()/2, f.getWidth(), f.getHeight(), 1, 1, f.getAngle());
         }
 
@@ -168,7 +166,7 @@ public class ScreenGame implements Screen {
 
     }
     private void spawnFruit(){
-        fruits.add(new DynamicObjectCircle(world, random(0,W_WIDTH),-2, 0.5f, MathUtils.random(imgFruits.length-1)));
+        fruits.add(new DynamicObjectFruit(world, random(0,W_WIDTH),-2, 0.5f, MathUtils.random(imgFruits.length-1)));
     }
 
     @Override
@@ -195,6 +193,7 @@ public class ScreenGame implements Screen {
     @Override
     public void dispose() {
         batch.dispose();
+        font.dispose();
         knife.getTexture().dispose();
 
     }
@@ -259,15 +258,17 @@ public class ScreenGame implements Screen {
                             isGameOver = true;
                             score--;
                             if(isSoundOn) sndExplosion.play();
-                            if(maxScore<=score){
-                                maxScore = score;
-                            }
+                            boomX = fruits.get(i).getX();
+                            boomY = fruits.get(i).getY();
 
                         }
                         world.destroyBody(fruits.get(i).body);
                         fruits.get(i).body = null;
                         fruits.remove(i);
                         score++;
+                        if(maxScore<=score){
+                            maxScore++;
+                        }
                         if(isSoundOn) sndCut.play();
                     }
                 }}
