@@ -107,12 +107,15 @@ public class ScreenGame implements Screen {
 
         if(Gdx.input.justTouched()) {
             touch.set(Gdx.input.getX(), Gdx.input.getY(), 0);
-            camera.unproject(touch);
+            cameraTxt.unproject(touch);
             if (btnMenu.buttonHit(touch)) {
                 main.setScreen(main.screenMenu);
+                isGameOver = false;
+                score = 0;
             }
             if (btnRestart.buttonHit(touch)) {
-                main.setScreen(main.screenGame);
+                isGameOver = false;
+                score = 0;
             }
         }
 
@@ -140,9 +143,8 @@ public class ScreenGame implements Screen {
         knife.draw(batch);
         batch.draw(imgBackground,0,0,W_WIDTH,W_HEIGHT);
         //debugRenderer.render(world, camera.combined);
-        if(isGameOver){
-            batch.draw(imgBoom, boomX,boomY);
-        }
+
+
 
 
         for(DynamicObjectFruit f: fruits) {
@@ -156,6 +158,7 @@ public class ScreenGame implements Screen {
             font.draw(batchTxt, "score:" + score, 0, W_HEIGHT * 100 - 10, W_WIDTH * 100 - 10, Align.right, true);
         }
         else {
+            //batch.draw(imgBoom, boomX,boomY);
             font.draw(batchTxt, "Game Over", 0, W_HEIGHT*100/2+100, W_WIDTH*100, Align.center, true);
             font.draw(batchTxt, "Your Score: " + score, 0, W_HEIGHT*100/2, W_WIDTH*100, Align.center, true);
             btnMenu.font.draw(batchTxt, btnMenu.text, btnMenu.x, btnMenu.y);
@@ -267,7 +270,7 @@ public class ScreenGame implements Screen {
                         fruits.remove(i);
                         score++;
                         if(maxScore<=score){
-                            maxScore++;
+                            maxScore = score;
                         }
                         if(isSoundOn) sndCut.play();
                     }

@@ -21,7 +21,7 @@ public class ScreenAbout implements Screen {
 
     Texture imgBackGround;
 
-    Buttons btnBack, Text;
+    Buttons btnBack, btnText;
     private String text = "    В этой игре ты должен нажимать\n" +
         "  на фрукты и, тем самым, разрезать их.\n" +
         " Чтобы начать игру, нажми кнопку 'Play'\n" +
@@ -40,7 +40,7 @@ public class ScreenAbout implements Screen {
         imgBackGround = new Texture("background.jpg");
 
         btnBack = new Buttons("Back", font, 870);
-        Text = new Buttons(text, font, 600);
+        btnText = new Buttons(text, font, 600);
     }
 
 
@@ -53,10 +53,11 @@ public class ScreenAbout implements Screen {
         // касания
         if(Gdx.input.justTouched()){
             touch.set(Gdx.input.getX(), Gdx.input.getY(), 0);
-            camera.unproject(touch);
+            cameraTxt.unproject(touch);
 
             if(btnBack.buttonHit(touch)){
                 main.setScreen(main.screenMenu);
+                System.out.println("zzzz"+touch.x+" "+touch.y);
             }
         }
         // отрисовка
@@ -66,7 +67,7 @@ public class ScreenAbout implements Screen {
         batch.end();
         batchTxt.setProjectionMatrix(cameraTxt.combined);
         batchTxt.begin();
-        Text.font.draw(batch, Text.text,Text.x, Text.y);
+        btnText.font.draw(batch, btnText.text, btnText.x, btnText.y);
         btnBack.font.draw(batch, btnBack.text, 50, btnBack.y);
         batchTxt.end();
     }

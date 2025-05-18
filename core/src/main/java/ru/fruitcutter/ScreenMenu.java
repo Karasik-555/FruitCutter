@@ -58,7 +58,8 @@ public class ScreenMenu implements Screen {
         // касания
         if(Gdx.input.justTouched()){
             touch.set(Gdx.input.getX(), Gdx.input.getY(), 0);
-            camera.unproject(touch);
+            cameraTxt.unproject(touch);
+            //System.out.println("zzzz"+touch.x+" "+touch.y);
             if(btnPlay.buttonHit(touch)){
                 main.setScreen(main.screenGame);
             }
@@ -69,6 +70,7 @@ public class ScreenMenu implements Screen {
                 main.setScreen(main.screenAbout);
             }
             if(btnExit.buttonHit(touch)){
+
                 Gdx.app.exit();
             }
         }
