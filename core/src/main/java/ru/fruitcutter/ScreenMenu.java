@@ -41,7 +41,6 @@ public class ScreenMenu implements Screen {
         btnPlay = new Buttons("Play", font, 700, 600);
         btnAbout = new Buttons("About", font, 680, 500);
         btnExit = new Buttons("Exit", font, 707, 300);
-
         btnSound = new Buttons(isSoundOn ? "Sound On" : "Sound Off", font, 615, 400);
     }
 

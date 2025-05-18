@@ -66,7 +66,7 @@ public class ScreenAbout implements Screen {
         batchTxt.setProjectionMatrix(cameraTxt.combined);
         batchTxt.begin();
         btnText.font.draw(batch, btnText.text, btnText.x, btnText.y);
-        btnBack.font.draw(batch, btnBack.text, 50, btnBack.y);
+        btnBack.font.draw(batch, btnBack.text, btnBack.x, btnBack.y);
         batchTxt.end();
     }
 
