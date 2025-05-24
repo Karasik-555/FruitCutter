@@ -1,20 +1,15 @@
 package ru.fruitcutter;
 
-
 import static ru.fruitcutter.ScreenGame.*;
 
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.math.Vector3;
-
 public class Buttons {
     String text;
     BitmapFont font;
     float x, y;
-    Vector3 touchPosition;
-
     float width, height;
-
     public Buttons(String text, BitmapFont font, float x, float y) {
         this.text = text;
         this.font = font;
@@ -24,7 +19,6 @@ public class Buttons {
         width = glyphLayout.width;
         height = glyphLayout.height;
     }
-
     public Buttons(String text, BitmapFont font, float y) {
         this.text = text;
         this.font = font;
@@ -34,21 +28,16 @@ public class Buttons {
         height = glyphLayout.height;
         x = W_WIDTH*100/2 - width/2;
     }
-
     public void setFont(BitmapFont font){
         this.font = font;
         GlyphLayout glyphLayout = new GlyphLayout(font, text);
         width = glyphLayout.width;
         height = glyphLayout.height;
     }
-
-    public void setText(String text){
+    public void setText(String text) {
         this.text = text;
         GlyphLayout glyphLayout = new GlyphLayout(font, text);
         width = glyphLayout.width;
-    }
-    boolean buttonHit(float tx, float ty){
-        return x<tx && tx<x+width && y>ty && ty>y-height;
     }
     public boolean buttonHit(Vector3 t){
         return x<t.x && t.x<x+width && y>t.y && t.y>y-height;

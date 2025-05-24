@@ -9,21 +9,15 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector3;
-
-/** {@link com.badlogic.gdx.ApplicationListener} implementation shared by all platforms. */
 public class Main extends Game {
     public static boolean isSoundOn = true;
-    public SpriteBatch batch;
-    public SpriteBatch batchTxt;
-    public OrthographicCamera camera;
-    public OrthographicCamera cameraTxt;
+    public SpriteBatch batch,batchTxt;
+    public OrthographicCamera camera,cameraTxt;
     public Vector3 touch;
     public BitmapFont font;
-
     ScreenMenu screenMenu;
     ScreenGame screenGame;
     ScreenAbout screenAbout;
-
     @Override
     public void create() {
         batch = new SpriteBatch();
@@ -39,11 +33,9 @@ public class Main extends Game {
         screenAbout = new ScreenAbout(this);
         setScreen(screenMenu);
     }
-
     @Override
     public void dispose() {
         batch.dispose();
         font.dispose();
-
     }
 }

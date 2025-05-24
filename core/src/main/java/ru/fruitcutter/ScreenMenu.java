@@ -2,7 +2,6 @@ package ru.fruitcutter;
 
 import static ru.fruitcutter.Main.*;
 import static ru.fruitcutter.ScreenGame.*;
-
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -11,24 +10,17 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.Align;
-
 public class ScreenMenu implements Screen {
-    private SpriteBatch batch;
-    private SpriteBatch batchTxt;
-    private OrthographicCamera camera;
-    private OrthographicCamera cameraTxt;
+    private SpriteBatch batch,batchTxt;
+    private OrthographicCamera camera,cameraTxt;
     private Vector3 touch;
     private BitmapFont font;
     private Main main;
-
     Texture imgBackGround;
-
     Buttons btnPlay;
     Buttons btnAbout;
     Buttons btnExit;
     Buttons btnSound;
-    String soundText;
-
     public ScreenMenu(Main main) {
         this.main = main;
         batch = main.batch;
@@ -43,14 +35,11 @@ public class ScreenMenu implements Screen {
         btnExit = new Buttons("Exit", font, 707, 300);
         btnSound = new Buttons(isSoundOn ? "Sound On" : "Sound Off", font, 615, 400);
     }
-
     @Override
     public void show() {
     }
-
     @Override
     public void render(float delta) {
-        // касания
         if(Gdx.input.justTouched()){
             touch.set(Gdx.input.getX(), Gdx.input.getY(), 0);
             cameraTxt.unproject(touch);
@@ -70,7 +59,6 @@ public class ScreenMenu implements Screen {
                 Gdx.app.exit();
             }
         }
-        // отрисовка
         batch.setProjectionMatrix(camera.combined);
         batch.begin();
         batch.draw(imgBackGround, 0, 0, W_WIDTH, W_HEIGHT);
@@ -84,29 +72,19 @@ public class ScreenMenu implements Screen {
         font.draw(batchTxt,"Your best score: " + maxScore, 10, 50, W_WIDTH * 100 - 10, Align.left, true);
         batchTxt.end();
     }
-
     @Override
     public void resize(int width, int height) {
-
     }
-
     @Override
     public void pause() {
-
     }
-
     @Override
     public void resume() {
-
     }
-
     @Override
     public void hide() {
-
     }
-
     @Override
     public void dispose() {
-
     }
 }
